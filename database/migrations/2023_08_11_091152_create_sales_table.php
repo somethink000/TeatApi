@@ -40,7 +40,6 @@ return new class extends Migration
             $table->string("category");
             $table->string("brand");
             $table->integer("is_storno");
-            $table->timestamps();
         });
     }
 

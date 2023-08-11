@@ -31,7 +31,6 @@ return new class extends Migration
             $table->string("brand");
             $table->integer("is_cancel");
             $table->date("cancel_dt");
-            $table->timestamps();
         });
     }
 

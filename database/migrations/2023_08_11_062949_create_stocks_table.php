@@ -32,7 +32,6 @@ return new class extends Migration
             $table->string("sc_code");
             $table->integer("price");
             $table->integer("discount");
-            $table->timestamps();
         });
     }
 
