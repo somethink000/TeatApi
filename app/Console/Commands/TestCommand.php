@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use App\Models\Stocks;
-
+use Illuminate\Http\Client\Response;
 
 use function Psy\debug;
 
@@ -30,50 +30,41 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        //$dateFrom = now()->format('Y-m-d');
 
-        // $response = Http::get(
-        //     //now()->format('Y-m-d')
-        //     "89.108.115.241:6969/api/stocks",
-        //     //"89.108.115.241:6969/api/sales",
-        //     [
-        //         'key' => 'E6kUTYrYwZq2tN4QEtyzsbEBk3ie',
-        //         'dateFrom' => '2023-08-11',
-        //         //'dateTo' => '2023-08-10',
-        //         'limit' => '5',
-        //         'page' => '500'
-        //     ]
+        $pageCount = $this->getData('1')['meta']['last_page'];
 
-        // );
+        //TODO make good think
+        // for ($i = 1; $i <= $pageCount; $i++) {
 
+        //     foreach ($this->getData($i)['data'] as $item) {
+        //         Stocks::create($item);
+        //         //dump($item);
+        //     }
+        // }
+
+        // dump($this->getData('1'));
+    }
+
+
+    protected function getData(string $page) : array
+    {
         $response = Http::get(
-            //now()->format('Y-m-d')
+
             "89.108.115.241:6969/api/stocks",
-            //"89.108.115.241:6969/api/sales",
             [
                 'key' => 'E6kUTYrYwZq2tN4QEtyzsbEBk3ie',
-                'dateFrom' => '2023-08-11',
+                'dateFrom' => '2023-08-12',
                 //'dateTo' => '2023-08-10',
-                'limit' => '5',
-                'page' => '1'
+                //'limit' => '1',
+                'page' => $page
             ]
-           
+
         );
 
-        $data = json_decode($response->body());
-
-        //dump($data);
-        foreach($data as $dt){
-            $dt = (array)$dt;
-
-            Stocks::create($dt);
-           //dump($dt);
+        if ($response->failed()) {
+            dump($response->status(), $response->json());
         }
-        //Stocks::create();
 
-        //?dateFrom={Дата выгрузки ОТ}&dateTo={Дата выгрузки ДО}}&page={номер страницы}&limit={количество записей}key={ваш токен}');
-
-        //  dump();
-        $pas = 'E6kUTYrYwZq2tN4QEtyzsbEBk3ie';
+        return $response->json();
     }
 }

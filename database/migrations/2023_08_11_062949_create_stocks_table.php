@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->date("date");
+            $table->date("date")->nullable();
             $table->date("last_change_date");
             $table->string("supplier_article");
             $table->string("tech_size");
-            $table->integer("barcode");
+            $table->string("barcode");
             $table->integer("quantity");
             $table->integer("is_supply");
             $table->integer("is_realization");
