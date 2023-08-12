@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Orders extends Model
+class Order extends Model
 {
     use HasFactory;
-
+    use FetchSorceApiTrate;
     public $timestamps = false;
 
     protected $fillable = [
@@ -30,6 +30,18 @@ class Orders extends Model
         'brand',
         'is_cancel',
         'cancel_dt',
-        
+
     ];
+
+    public static function getDataFromApi(int $page): array
+    {
+        return static::getDataFromApiBase(
+            'orders',
+            $page,
+            [
+                'dateFrom' => '2022-05-10',
+                'dateTo' => now()->format('Y-m-d')
+            ]
+        );
+    }
 }

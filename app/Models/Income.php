@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Incomes extends Model
+class Income extends Model
 {
     use HasFactory;
-
+    use FetchSorceApiTrate;
     public $timestamps = false;
 
     protected $fillable = [
@@ -26,4 +26,15 @@ class Incomes extends Model
         'nm_id',
         'status',
     ];
+
+    public static function getDataFromApi(int $page) : array{
+        return static::getDataFromApiBase(
+            'incomes',
+            $page,
+            [
+                'dateFrom' => '2022-05-10',
+                'dateTo' => now()->format('Y-m-d')
+            ]
+            );
+    }
 }

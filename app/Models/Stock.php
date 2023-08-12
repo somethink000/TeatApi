@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Stocks extends Model
+class Stock extends Model
 {
     use HasFactory;
+    use FetchSorceApiTrate;
 
     public $timestamps = false;
 
@@ -32,4 +33,15 @@ class Stocks extends Model
         'price',
         'discount',
     ];
+
+    public static function getDataFromApi(int $page) : array{
+        return static::getDataFromApiBase(
+            'stocks',
+            $page,
+            [
+                'dateFrom' => now()->format('Y-m-d'),
+                'dateTo' => now()->format('Y-m-d')
+            ]
+            );
+    }
 }

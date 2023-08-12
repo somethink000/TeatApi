@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Income;
+use App\Models\Order;
+use App\Models\Sale;
 use Illuminate\Support\Facades\Route;
-use App\Models\Stocks;
+use App\Models\Stock;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +17,10 @@ use App\Models\Stocks;
 */
 
 Route::get('/', function () {
-    return dd(Stocks::get());
+    return dd(
+        Stock::get(),
+        Sale::get(),
+        Income::get(),
+        Order::get()
+    );
 });

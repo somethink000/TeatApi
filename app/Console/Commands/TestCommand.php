@@ -2,10 +2,17 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Incomes;
+use App\Models\Orders;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
-use App\Models\Stocks;
+use App\Models\Stock;
+use App\Models\Sale;
+use App\Models\Income;
+use App\Models\Order;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\DB;
 
 use function Psy\debug;
 
@@ -30,41 +37,46 @@ class TestCommand extends Command
      */
     public function handle()
     {
-
-        $pageCount = $this->getData('1')['meta']['last_page'];
-
-        //TODO make good think
-        // for ($i = 1; $i <= $pageCount; $i++) {
-
-        //     foreach ($this->getData($i)['data'] as $item) {
-        //         Stocks::create($item);
-        //         //dump($item);
-        //     }
-        // }
-
-        // dump($this->getData('1'));
-    }
+        $modelsArray = [
+            Stock::class,
+            Sale::class,
+            Order::class,
+            Income::class
+        ];
 
 
-    protected function getData(string $page) : array
-    {
-        $response = Http::get(
+        foreach ($modelsArray as $model) {
 
-            "89.108.115.241:6969/api/stocks",
-            [
-                'key' => 'E6kUTYrYwZq2tN4QEtyzsbEBk3ie',
-                'dateFrom' => '2023-08-12',
-                //'dateTo' => '2023-08-10',
-                //'limit' => '1',
-                'page' => $page
-            ]
+            $page = 1;
+            $total = null;
 
-        );
 
-        if ($response->failed()) {
-            dump($response->status(), $response->json());
+            $model::query()->delete();
+
+
+
+            DB::beginTransaction();
+
+
+            do {
+                $data = $model::getDataFromApi($page);
+                dump($page);
+                foreach ($data['data'] as $item) {
+                    $model::create($item);
+                }
+
+                $page++;
+                $total = $data['meta']['total'];
+            } while ($data['meta']['last_page'] >= $page);
+
+            if ($total !== $model::count('id')) {
+                DB::rollBack();
+                return static::FAILURE;
+            }
+
+
+            DB::commit();
         }
-
-        return $response->json();
+        return static::SUCCESS;
     }
 }

@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Sales extends Model
+class Sale extends Model
 {
     use HasFactory;
+    use FetchSorceApiTrate;
 
     public $timestamps = false;
 
@@ -40,4 +41,25 @@ class Sales extends Model
         'brand',
         'is_storno',
     ];
+
+    // public static function getDataFromApi(int $page) : array{
+    //     return static::getDataFromApiBase(
+    //         'sales',
+    //         $page,
+    //         [
+    //             'dateFrom' => '2023-05-10',
+    //             'dateTo' => now()->format('Y-m-d')
+    //         ]
+    //         );
+    // }
+    public static function getDataFromApi(int $page) : array{
+        return static::getDataFromApiBase(
+            'sales',
+            $page,
+            [
+                'dateFrom' => '2022-05-10',
+                'dateTo' => now()->format('Y-m-d')
+            ]
+            );
+    }
 }

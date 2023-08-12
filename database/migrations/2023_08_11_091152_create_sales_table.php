@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->integer("g_number");
+            $table->string("g_number");
             $table->date("date");
             $table->date("last_change_date");
             $table->string("supplier_article");
             $table->string("tech_size");
-            $table->integer("barcode");
+            $table->string("barcode");
             $table->integer("total_price");
             $table->integer("discount_percent");
             $table->integer("is_supply");
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string("region_name");
             $table->integer("income_id");
             $table->string("sale_id");
-            $table->integer("odid");
+            $table->bigInteger("odid");
             $table->integer("spp");
             $table->float("for_pay");
             $table->integer("finished_price");
