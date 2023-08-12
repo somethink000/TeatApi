@@ -19,11 +19,11 @@ return new class extends Migration
             $table->date("last_change_date");
             $table->string("supplier_article");
             $table->string("tech_size");
-            $table->integer("barcode");
+            $table->string("barcode");
             $table->integer("quantity");
             $table->integer("total_price");
             $table->date("date_close");
-            $table->string("warehouse_name");
+            $table->string("warehouse_name")->nullable();
             $table->integer("nm_id");
             $table->string("status");
         });
